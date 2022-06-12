@@ -2,6 +2,16 @@
   width: 50px;
 }
 
+input,
+button {
+  border: 1px solid;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
