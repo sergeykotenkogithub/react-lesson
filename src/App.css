@@ -1,5 +1,15 @@
-.App {
-  text-align: center;
+.image-app {
+  width: 50px;
+}
+
+input,
+button {
+  border: 1px solid;
+  margin-right: 10px;
+}
+
+button {
+  padding: 5px;
 }
 
 .App-logo {
@@ -32,6 +42,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
