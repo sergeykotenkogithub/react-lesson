@@ -1,15 +1,9 @@
-.image-app {
-  width: 50px;
+.App {
+  text-align: center;
 }
 
-input,
-button {
-  border: 1px solid;
-  margin-right: 10px;
-}
-
-button {
-  padding: 5px;
+.chat {
+  display: flex;
 }
 
 .App-logo {

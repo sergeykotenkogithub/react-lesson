@@ -1,71 +1,150 @@
+import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
-import React, { useState, useEffect, useRef } from "react";
+import { makeStyles, styled } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import { Button } from '@mui/material';
+import Chats from './Chats';
+import Message from './Message';
 
-export default function App() {
-  let [messageList, setMessageList] = useState([])
-  let [message, setMessage] = useState('');
-  const ref = useRef(null);
+function App() {
+  const [messageList, setMessageList] = useState([]);
+  const [text, setText] = useState('');
+  const [author, setAuthor] = useState('');
+  const inputRef = useRef(null);
+  const [chatList] = useState([
+    { id: 1, name: 'Chat 1' },
+    { id: 2, name: 'Chat 2' },
+    { id: 3, name: 'Chat 3' },
+  ])
 
-  const send = () => {
-    const input = document.querySelector('input');
-    setMessage(message = input.value);
-    input.value = '';
-  }
+  // useEffect(() => {
+  //   setTimeout(() => (
+  //     botAnswer(messageList)
+  //   ), 1500)
+  // }, [messageList]);
 
-  const render = () => {
-    setMessageList(
-      messageList = [
-        {
-          id: 1,
-          author: 'Андрей',
-          text: 'Это текст Андрея тут'
-        },
-        {
-          id: 2,
-          author: 'Иван',
-          text: 'Это текст Иван тут'
-        },
-        {
-          id: 3,
-          author: 'Петр',
-          text: 'Это текст Петра тут'
-        },
-        {
-          id: 4,
-          author: 'Василий',
-          text: 'Это текст Василия тут'
-        }
+
+  function onButtonClick() {
+    let newid = 1;
+    if (messageList.length > 0) newid = messageList[messageList.length - 1].id + 1;
+    if (author.length > 0) {
+      setMessageList(message => [...message,
+      {
+        text: message,
+        author: author,
+        id: newid
+      }
       ]
-    )
+      )
+    } else {
+      alert('Author name needed')
+    }
   }
 
-  useEffect(() => {
-    console.log('first', ref.current);
-    setTimeout(() => {
-      ref.current.insertAdjacentHTML('beforeend',
-        `<div> Сообщение отправлено </div>`
-      );
-    }, 1500);
-  }, [message]);
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   setMessageList(prevState => [...prevState, {
+  //     id: giveLastId(prevState),
+  //     author,
+  //     text
+  //   }])
+  // }
+
+  function giveLastId(array) {
+    return array.length ? array[array.length - 1].id + 1 : 0;
+  }
+
+  function botAnswer() {
+    const lastAuthor = messageList[messageList.length - 1];
+    if (lastAuthor && lastAuthor.author) {
+      setMessageList(prevState => [...prevState, {
+        id: giveLastId(prevState),
+        text: `Сообщение автора ${lastAuthor.author} отправлено`
+
+      }])
+    }
+  }
+
+  const Demo = styled('div')(({ theme }) => ({
+    backgroundColor: theme.palette.background.paper,
+  }));
 
   return (
-    <div className="container my-0 mx-auto">
-      <input type="text" />
-      <button onClick={send}>Отправить сообщение</button>
-      <div className="message" ref={ref}>{message}</div>
-      <div>
-        <h1>Вывод авторов и текста</h1>
-        <button onClick={render}>Рендер</button>
-        <div>
-          {messageList.map(({ text, id }) => {
+    <div className='chat'>
+      <Box sx={{ flexGrow: 1, maxWidth: 300 }}>
+        <Grid item xs={6} md={6}>
+          <Typography sx={{ mt: 4, mb: 2, ml: 3 }} variant="h6" component="div">
+            Чаты:
+          </Typography>
+          <Demo>
+            <List>
+              {
+                chatList.map(({ name, id }) => {
+                  return (
+                    <Chats name={name} key={id} />
+                  )
+                })}
+            </List>
+          </Demo>
+        </Grid>
+      </Box>
+
+      <div className='messages'>
+        <Box
+          component="form"
+          sx={{ m: 1, borderRadius: '10px', width: '400px', mardin: '10px', padding: '15px' }}
+          noValidate
+          autoComplete='off'
+        >
+          <Typography sx={{ mt: 4, mb: 2, ml: 3 }} variant="h5" component="div">
+            Messages
+          </Typography>
+          <TextField
+            sx={{ margin: '10px 0', backgroundColo: '#fff' }}
+            required
+            fullWidth
+            id='outlined-required'
+            label="Author name"
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
+          >
+          </TextField>
+          <TextField
+            sx={{ margin: '10px 0', backgroundColo: '#fff' }}
+            fullWidth
+            id='outlined-required-1'
+            label="Author name"
+            value={text}
+            onChange={({ target }) => setText(target.value)}
+          >
+          </TextField>
+          <Button
+            sx={{ margin: '10px 0' }}
+            variant="outlined"
+            size='large'
+            fullWidth
+            inputRef={inputRef}
+            onClick={onButtonClick}
+          >
+            Send
+          </Button>
+        </Box>
+        {
+          messageList.map((item) => {
             return (
-              <div key={id}>
-                {text}
-              </div>
+              <Message author={item.author} text={item.text} key={item.id}></Message>
             )
-          })}
-        </div>
+          })
+        }
       </div>
+
     </div>
   );
 }
+
+export default App;
