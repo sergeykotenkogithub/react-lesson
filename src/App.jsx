@@ -21,24 +21,33 @@ function App() {
     { id: 3, name: 'Chat 3' },
   ])
 
-  // useEffect(() => {
-  //   setTimeout(() => (
-  //     botAnswer(messageList)
-  //   ), 1500)
-  // }, [messageList]);
+  useEffect(() => {
+    if (messageList.length > 0) {
+      setTimeout(() => (
+        alert(author + 'your message sent')
+      ), 1500)
+    }
+    focusTextField(inputRef.current)
+  }, [messageList, author]);
 
+  function focusTextField(input) {
+    if (input) {
+      input.focus();
+    }
+  }
 
   function onButtonClick() {
     let newid = 1;
     if (messageList.length > 0) newid = messageList[messageList.length - 1].id + 1;
     if (author.length > 0) {
-      setMessageList(message => [...message,
-      {
-        text: message,
-        author: author,
-        id: newid
-      }
-      ]
+      setMessageList(messages =>
+        [...messages,
+        {
+          info: text,
+          author: author,
+          id: newid
+        }
+        ]
       )
     } else {
       alert('Author name needed')
@@ -55,20 +64,20 @@ function App() {
   //   }])
   // }
 
-  function giveLastId(array) {
-    return array.length ? array[array.length - 1].id + 1 : 0;
-  }
+  // function giveLastId(array) {
+  //   return array.length ? array[array.length - 1].id + 1 : 0;
+  // }
 
-  function botAnswer() {
-    const lastAuthor = messageList[messageList.length - 1];
-    if (lastAuthor && lastAuthor.author) {
-      setMessageList(prevState => [...prevState, {
-        id: giveLastId(prevState),
-        text: `Сообщение автора ${lastAuthor.author} отправлено`
+  // function botAnswer() {
+  //   const lastAuthor = messageList[messageList.length - 1];
+  //   if (lastAuthor && lastAuthor.author) {
+  //     setMessageList(prevState => [...prevState, {
+  //       id: giveLastId(prevState),
+  //       text: `Сообщение автора ${lastAuthor.author} отправлено`
 
-      }])
-    }
-  }
+  //     }])
+  //   }
+  // }
 
   const Demo = styled('div')(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
@@ -111,16 +120,17 @@ function App() {
             id='outlined-required'
             label="Author name"
             value={author}
-            onChange={({ target }) => setAuthor(target.value)}
+            onChange={(e) => setAuthor(e.target.value)}
           >
           </TextField>
           <TextField
             sx={{ margin: '10px 0', backgroundColo: '#fff' }}
             fullWidth
             id='outlined-required-1'
-            label="Author name"
+            label="Text"
             value={text}
-            onChange={({ target }) => setText(target.value)}
+            inputRef={inputRef}
+            onChange={(e) => setText(e.target.value)}
           >
           </TextField>
           <Button
@@ -128,7 +138,6 @@ function App() {
             variant="outlined"
             size='large'
             fullWidth
-            inputRef={inputRef}
             onClick={onButtonClick}
           >
             Send
@@ -137,7 +146,7 @@ function App() {
         {
           messageList.map((item) => {
             return (
-              <Message author={item.author} text={item.text} key={item.id}></Message>
+              <Message author={item.author} info={item.info} key={item.id} />
             )
           })
         }
