@@ -18,18 +18,36 @@ export default function ChatPage() {
         }
     ]);
 
+    const [name, setName] = useState('');
+
+    const deleteHandler = (id) => {
+        const filteredItems = chats.filter((chat) => chat.id !== id)
+        setChats(filteredItems);
+    }
+
+    const addHandler = () => {
+        let random = Math.random();
+        const obj = {
+            id: random,
+            name: name
+        }
+        setChats(prevState => [...prevState, obj]);
+    }
+
     return (
         <div>
-            chats
+            <h1>Chats:</h1>
+            <input value={name} onChange={(e) => setName(e.target.value)} />
+            <button onClick={addHandler}>Add chat</button>
             {
                 chats.map((chat) => (
                     <div style={{ display: 'flex' }} key={chat.id}>
                         <p style={{ padding: 0, margin: 0, width: '100px' }}>{chat.name}</p>
-                        <button>X</button>
+                        <button onClick={() => deleteHandler(chat.id)}>X</button>
                     </div>
                 ))
             }
-            <div><Link to={'/'}>Home</Link></div>
+            <div style={{ paddingTop: '10px' }}><Link to={'/'}>Home</Link></div>
         </div>
     );
 }
