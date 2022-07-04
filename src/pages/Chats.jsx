@@ -12,6 +12,7 @@ export default function Chats() {
             <Link key={chat.id} to={`/messages/${chat.id}`}>
                 {chat.name}
             </Link>
+
         ))}
     </div>
   )
