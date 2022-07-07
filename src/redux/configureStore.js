@@ -1,7 +1,9 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
-import { chatReducers } from './reducers/chatsReducers/chatsReducers';
-import { messagesReducers } from './reducers/messagesReducer/messagesReducer';
 import { createLogger } from "redux-logger";
+// import { todosReducer } from "./reducers/todosReducer/todosReducer";
+import { chatReducers } from './reducers/chatsReducers/chatsReducers'
+import { todosReducer } from "./reducers/todosReducer/todosReducer";
+import thunk from "redux-thunk";
 
 const logger = createLogger({
     collapsed: true,
@@ -10,7 +12,8 @@ const logger = createLogger({
 
 const rootReducer = combineReducers({
     chats: chatReducers,
-    messages: messagesReducers
+    todos: todosReducer
+    // messages: messagesReducers
 });
 
-export const store = createStore(rootReducer, applyMiddleware(logger));
+export const store = createStore(rootReducer, applyMiddleware(thunk, logger));

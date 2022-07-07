@@ -1,15 +1,26 @@
 import React, { useEffect } from 'react'
-// https://jsonplaceholder.typicode.com/todos
+import { useDispatch } from 'react-redux/es/exports';
+import { useSelector } from 'react-redux';
+import { getTodos } from '../redux/reducers/todosReducer/todosSelector';
+import { loadTodos } from '../redux/reducers/todosReducer/todosReducer';
+
 export default function Todos() {
 
-    useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/todos')
-            .then(response => response.json())
-            .then(data => console.log(data))
+    const todos = useSelector(getTodos);
+    const dispatch = useDispatch();
 
-    });
+    useEffect(() => {
+        dispatch(loadTodos());
+    }, []);
 
     return (
-        <div>Todos</div>
+        <div>
+            <h1>Todos</h1>
+            {todos.map((todo) => (
+                <div key={todo.id}>
+                    <h2>{todo.title}</h2>
+                </div>
+            ))}
+        </div>
     )
 }
