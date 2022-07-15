@@ -32,7 +32,7 @@ export default function Chat() {
   return (
       <Container>
         <Grid container style={{height: window.innerHeight - 70, marginTop: 20}} justifyContent={'center'}>
-          <div style={{width: '80%', height: '60vh', border: '1px solid gray', overflowY: 'auto'}}>
+          <div style={{width: '80%', height: '80%', border: '1px solid gray', overflowY: 'auto'}}>
             {messages.map(message =>
                 <div style={{
                     margin: 10,
@@ -67,7 +67,7 @@ export default function Chat() {
                   value={value}
                   onChange={e => setValue(e.target.value)}
                 />
-                <Button onClick={sendMessage} variant={'outlined'}>Отправить</Button>
+                <Button style={{marginTop: 20}} onClick={sendMessage} variant={'outlined'}>Отправить</Button>
             </Grid>
         </Grid>
       </Container>
